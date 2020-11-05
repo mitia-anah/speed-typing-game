@@ -29799,9 +29799,12 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * For now, just console.log the word count when the button gets clicked to test it out.
  */
 function App() {
+  const START_GAME = 5;
   const [text, setText] = (0, _react.useState)('');
-  const [time, setTime] = (0, _react.useState)(15);
+  const [time, setTime] = (0, _react.useState)(START_GAME);
   const [runTime, setRunTime] = (0, _react.useState)(false);
+  const [finalResult, setfinalResult] = (0, _react.useState)(0);
+  const inputText = (0, _react.useRef)(null);
 
   function handleChange(e) {
     const {
@@ -29815,11 +29818,32 @@ function App() {
   function numberOfWordCount() {
     const countedWord = text.trim().split(' ');
     return countedWord.filter(word => word !== '').length;
+  } // function timer() {
+  //     setRunTime(true)
+  //     setfinalResult(0)
+  //     setText(' ')
+  // }
+
+
+  function restartCount() {
+    setRunTime(true);
+    setTime(START_GAME);
+    setText('');
+    inputText.current.disabled = false;
+    inputText.current.focus();
   }
 
-  function timer() {
-    setRunTime(true);
+  function endGame() {
+    setRunTime(false);
+    setfinalResult(numberOfWordCount(text));
   }
+  /**
+  * Challenge:
+  * 
+  * Make the input box focus (DOM elements have a method called .focus()) 
+  * immediately when the game starts
+  */
+
 
   (0, _react.useEffect)(() => {
     let startTime = null;
@@ -29832,52 +29856,22 @@ function App() {
           });
         }, 1000);
       }
+    } else if (runTime === 0) {
+      endGame();
     }
   }, [runTime, time]);
-  /**
-   * Challenge:
-   * 
-   * Make it so clicking the Start button starts the timer instead of it starting on refresh
-   * (Hint: use a new state variable to indicate if the game should be running or not)
-   */
-
-  /**
-  * Challenge:
-  * 
-  * 1. Create state to hold the current value of the countdown timer.
-  *    Display this time in the "Time Remaining" header
-  * 
-  * 2. Set up an effect that runs every time the `timeRemaining` changes
-  *    The effect should wait 1 second, then decrement the `timeRemaining` by 1
-  * 
-  *    Hint: use `setTimeout` instead of `setInterval`. This will help you avoid
-  *    a lot of extra work.
-  * 
-  *    Warning: there will be a bug in this, but we'll tackle that next
-  */
-
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h1", null, "Speed Typing Game"), /*#__PURE__*/_react.default.createElement("textarea", {
+    ref: inputText,
+    disabled: !runTime,
     value: text,
     onChange: handleChange
   }), /*#__PURE__*/_react.default.createElement("h4", null, "Time remaining:", time), /*#__PURE__*/_react.default.createElement("button", {
-    onClick: timer
-  }, "start"), /*#__PURE__*/_react.default.createElement("h1", null, "Word count:", numberOfWordCount(text)));
+    disabled: runTime,
+    onClick: restartCount
+  }, "start"), /*#__PURE__*/_react.default.createElement("h1", null, "Word count:", finalResult));
 }
 
 var _default = App;
-/**
- * Challenge: build the basic structure of our game
- *
- * 1. <h1> title at the top
- * 2. <textarea> for the box to type in
- *      (tip: React normalizes <textarea /> to be more like <input />,
- *      so it can be used as a self-closing element and uses the `value` property
- *      to set its contents)
- * 3. <h4> ti display the amount of time remaining
- * 4. <button> to start the game
- * 5. Another <h1> to display the word count
- */
-
 exports.default = _default;
 },{"react":"node_modules/react/index.js"}],"index.js":[function(require,module,exports) {
 "use strict";
@@ -29919,7 +29913,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49761" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52167" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
